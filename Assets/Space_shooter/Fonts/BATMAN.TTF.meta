@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 2ffb04d7e8a321c4880df09172709d30
+timeCreated: 1500288867
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Batman Beat the hell Outta Me
+  fontNames:
+  - Batman Beat the hell Outta Me
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
