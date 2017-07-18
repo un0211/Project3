@@ -8,10 +8,13 @@ public class GameController : MonoBehaviour {
     public GameObject background;
     public GameObject playerExplosion;
     public GameObject player;
-    public GameObject enemies;
+    public GameObject distruction;
     private PlayerControllar playerController;
     private SkinnedMeshRenderer SMR;
     public GameObject[] hazards;
+    public GameObject[] enemies;
+    public GameObject[] items;
+    public GameObject[] coins;
     public Texture[] textures;
     public Vector3 spawnValues;
     private float spawnWait;
@@ -26,6 +29,8 @@ public class GameController : MonoBehaviour {
     public GUIText bombText;
 
     private int hazardCount = 10;
+    private float enemyRate;
+    private float itemRate;
     private int CHANGE_SCORE = 1;
     private int CHANGE_ROUND = 2;
     private int life;
@@ -44,6 +49,8 @@ public class GameController : MonoBehaviour {
         life = 2;
         bomb = 1;
         spawnWait = 1.0f;
+        enemyRate = 0.0f;
+        itemRate = 0.4f;
 
         gameOverText.text = "";
         UpdateText(CHANGE_SCORE);
@@ -64,14 +71,36 @@ public class GameController : MonoBehaviour {
             UpdateLevel();
             for (int i = 0; i < hazardCount; i++)
             {
-                GameObject hazard = hazards[Random.Range(0, 4)];
-                if (round <= 3)
-                    hazard = hazards[Random.Range(0, 3)];
-                if (Random.Range(0.0f, 0.99f) > 0.8f)
-                    hazard = hazards[Random.Range(0, hazards.Length)];
+                GameObject enemy;
+                GameObject item;
+                GameObject coin;
+
                 Vector3 spawnPosition = new Vector3(Random.Range(-spawnValues.x, spawnValues.x), spawnValues.y, spawnValues.z);
                 Quaternion spawnRotation = Quaternion.identity;
-                Instantiate(hazard, spawnPosition, spawnRotation).transform.SetParent(enemies.transform);
+                GameObject hazard = hazards[Random.Range(0, hazards.Length)];
+                Instantiate(hazard, spawnPosition, spawnRotation).transform.SetParent(distruction.transform);
+
+                if (Random.Range(0.0f, 0.99f) < enemyRate)
+                {
+                    if (round < 5)
+                        enemy = enemies[0];
+                    else
+                        enemy = enemies[Random.Range(0, enemies.Length)];
+                    spawnPosition = new Vector3(Random.Range(-spawnValues.x, spawnValues.x), spawnValues.y, spawnValues.z);
+                    Instantiate(enemy, spawnPosition, spawnRotation).transform.SetParent(distruction.transform);
+                }
+                if (Random.Range(0.0f, 0.99f) < itemRate)
+                {
+                    item = items[Random.Range(0, items.Length)];
+                    spawnPosition = new Vector3(Random.Range(-spawnValues.x, spawnValues.x), spawnValues.y, spawnValues.z);
+                    Instantiate(item, spawnPosition, spawnRotation);
+                }
+                if(Random.Range(0.0f, 0.99f) < 0.04f)
+                {
+                    coin = coins[Random.Range(0, coins.Length)];
+                    spawnPosition = new Vector3(Random.Range(-spawnValues.x, spawnValues.x), spawnValues.y, spawnValues.z);
+                    Instantiate(coin, spawnPosition, spawnRotation);
+                }
                 yield return new WaitForSeconds(spawnWait);
             }
             yield return new WaitForSeconds(spawnWait);
@@ -92,6 +121,8 @@ public class GameController : MonoBehaviour {
     {
         hazardCount = (round / 5 + 2) * 5;
         spawnWait = 1.0f * Mathf.Max(0.6f, (1 - 0.25f * round));
+        enemyRate = Mathf.Min(0.6f, 0.02f * round);
+        itemRate = Mathf.Max(0.05f, 0.4f - 0.02f * round);
     }
 
     void UpdateText(int op)

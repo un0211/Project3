@@ -53,10 +53,10 @@ public class PlayerControllar : MonoBehaviour {
                 gameController.UpdateBomb(-1);
                 Instantiate(bombExplosion, new Vector3(0, 0, 6), GetComponent<Transform>().rotation);
                 
-                foreach (Transform t in gameController.enemies.transform)
+                foreach (Transform t in gameController.distruction.transform)
                 {
-                    if (t.gameObject.tag == "Enemy" || t.gameObject.tag == "Untagged")
-                        Destroy(t.gameObject);
+                    Destroy(t.gameObject);
+                    gameController.AddScore(20);
                 }
                 /*backBoundary.transform.localPosition = GetComponent<Transform>().position;
                 backBoundary.transform.localScale = new Vector3(2, 2, 2);
